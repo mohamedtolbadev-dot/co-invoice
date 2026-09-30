@@ -2,10 +2,11 @@ import React from "react";
 import useInvoiceStore from "@/store/useInvoiceStore";
 import { formatCurrency, calculateTotals } from "@/lib/utils";
 import { getFontFamily, getFontClass } from "@/lib/fontConfig";
+import { SignatureBlock } from "./SignatureBlock";
 
 export const ModernTemplate = React.forwardRef((props, ref) => {
   const { invoice, design } = useInvoiceStore();
-  const { sender, receiver, details, lineItems, footer } = invoice;
+  const { sender, receiver, details, lineItems, footer, signature } = invoice;
   const { accentColor, fontStack } = design;
 
   const { subtotal, taxAmount, total } = calculateTotals(
@@ -17,7 +18,7 @@ export const ModernTemplate = React.forwardRef((props, ref) => {
   const fontFamily = getFontFamily(fontStack);
 
   const colorMap = {
-    "blue-600": "#2563eb",
+    "blue-600": "#7C3AED",
     "emerald-600": "#059669",
     "rose-600": "#e11d48",
     "amber-600": "#d97706",
@@ -26,12 +27,12 @@ export const ModernTemplate = React.forwardRef((props, ref) => {
 
   const accentHex = accentColor.startsWith("#")
     ? accentColor
-    : colorMap[accentColor] || "#2563eb";
+    : colorMap[accentColor] || "#7C3AED";
 
   return (
     <div
       ref={ref}
-      className={`w-full max-w-[210mm] min-h-[297mm] bg-white text-black shadow-2xl shadow-black/5 p-6 sm:p-8 transition-all duration-300 ${fontClass} print:shadow-none print:m-0 print:w-full print:max-w-none print:min-h-0`}
+      className={`relative min-w-0 w-full max-w-[210mm] min-h-0 bg-white text-black shadow-2xl shadow-black/5 p-6 sm:p-8 transition-all duration-300 md:min-h-[297mm] ${fontClass} print:min-h-[297mm] print:shadow-none print:m-0 print:w-full print:max-w-none`}
       style={{
         borderTop: `10px solid ${accentHex}`,
         borderBottom: `10px solid ${accentHex}`,
@@ -180,6 +181,10 @@ export const ModernTemplate = React.forwardRef((props, ref) => {
             </span>
           </div>
         </div>
+      </div>
+
+      <div data-invoice-page="" className="pointer-events-none absolute inset-0 z-20">
+        <SignatureBlock signature={signature} isDraggable />
       </div>
 
       {/* Footer */}

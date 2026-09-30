@@ -8,7 +8,7 @@ export function Footer() {
 
 
   const colorMap = {
-    "blue-600": "#2563eb",
+    "blue-600": "#7C3AED",
     "emerald-600": "#059669",
     "rose-600": "#e11d48",
     "amber-600": "#d97706",
@@ -17,7 +17,7 @@ export function Footer() {
 
   const accentHex = design.accentColor.startsWith("#")
     ? design.accentColor
-    : colorMap[design.accentColor] || "#2563eb";
+    : colorMap[design.accentColor] || "#7C3AED";
 
   useEffect(() => {
     fetch("https://api.github.com/repos/mraxays/co-invoice")

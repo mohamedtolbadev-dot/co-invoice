@@ -48,6 +48,11 @@ export const FONTS = {
 
   sans: [
     {
+      name: "Droid Arabic Kufi + Josefin Sans",
+      value: "droid-arabic-kufi",
+      family: "'Droid Arabic Kufi', 'Josefin Sans', sans-serif",
+    },
+    {
       name: "DM Sans",
       value: "dm-sans",
       family: "'DM Sans', sans-serif",
@@ -57,12 +62,12 @@ export const FONTS = {
       value: "ibm-plex-sans",
       family: "'IBM Plex Sans', sans-serif",
     },
-    { name: "Inter", value: "inter", family: "'Inter', sans-serif" },
+    { name: "Inter", value: "inter", family: "Inter, Helvetica, Arial, sans-serif" },
     { name: "Lato", value: "lato", family: "'Lato', sans-serif" },
     {
       name: "Montserrat",
       value: "montserrat",
-      family: "'Montserrat', sans-serif",
+      family: "Montserrat, Helvetica, Arial, serif",
     },
     { name: "Nunito", value: "nunito", family: "'Nunito', sans-serif" },
     {
@@ -133,7 +138,7 @@ export const FONTS = {
 export const getFontFamily = (fontValue) => {
   const allFonts = [...FONTS.serif, ...FONTS.sans, ...FONTS.mono];
   const font = allFonts.find((f) => f.value === fontValue);
-  return font ? font.family : "'Inter', sans-serif";
+  return font ? font.family : "'Droid Arabic Kufi', 'Josefin Sans', sans-serif";
 };
 
 // Get Tailwind class by font value (for fallback)

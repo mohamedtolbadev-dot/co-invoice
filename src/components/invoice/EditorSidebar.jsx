@@ -1,146 +1,39 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { Separator } from "@/components/ui/separator";
 import { SenderForm } from "./forms/SenderForm";
 import { ReceiverForm } from "./forms/ReceiverForm";
 import { DetailsForm } from "./forms/DetailsForm";
 import { LineItems } from "./forms/LineItems";
+import { SignatureForm } from "./forms/SignatureForm";
 import { DesignControls } from "./DesignControls";
 import useInvoiceStore from "@/store/useInvoiceStore";
 import { Label } from "@/components/ui/label";
-import { HeartHandshake } from "lucide-react";
+import { FileText, Palette, Sparkles } from "lucide-react";
 
 export function EditorSidebar({ mobileView }) {
   const { invoice, updateFooter, design } = useInvoiceStore();
-
-  // Map accent colors to hex
-  const colorMap = {
-    "blue-600": "#2563eb",
-    "emerald-600": "#059669",
-    "rose-600": "#e11d48",
-    "amber-600": "#d97706",
-    "slate-600": "#475569",
-  };
-
-  const accentHex = design.accentColor.startsWith("#")
-    ? design.accentColor
-    : colorMap[design.accentColor] || "#2563eb";
+  const colorMap = { "blue-600": "#7C3AED", "emerald-600": "#059669", "rose-600": "#e11d48", "amber-600": "#d97706", "slate-600": "#475569" };
+  const accentHex = design.accentColor.startsWith("#") ? design.accentColor : colorMap[design.accentColor] || "#7C3AED";
+  const sectionClass = "rounded-2xl border border-border/70 bg-card p-4 shadow-sm shadow-black/[0.02]";
+  const headingClass = "mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground";
 
   return (
-    <div
-      className={`h-full flex flex-col ${
-        mobileView ? "" : "border-r border-border bg-card/30 backdrop-blur-xl"
-      }`}
-    >
-      <div className="p-6 pb-2">
-        <h2
-          className="text-2xl font-mono uppercase font-semibold"
-          style={{ color: accentHex }}
-        >
-          <a href="/">Co-Invoice</a>
-        </h2>
+    <div className={`flex h-full flex-col ${mobileView ? "" : "bg-background"}`}>
+      <div className="flex items-center justify-between border-b border-border/60 px-5 py-4">
+        <div className="flex items-center gap-3"><div className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary"><Sparkles size={17} /></div><div><p className="text-sm font-bold">Invoice editor</p><p className="text-[11px] text-muted-foreground">Build your next invoice</p></div></div>
+        <span className="rounded-full px-2.5 py-1 text-[10px] font-semibold" style={{ color: accentHex, backgroundColor: `${accentHex}14` }}>DRAFT</span>
       </div>
-
-      <Tabs
-        defaultValue="content"
-        className="flex-1 flex flex-col overflow-hidden"
-      >
-        <div className="px-6 pb-4">
-          <TabsList className="w-full grid grid-cols-2">
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="design">Design</TabsTrigger>
-          </TabsList>
-        </div>
-
-        <TabsContent
-          value="content"
-          className="flex-1 overflow-y-auto px-6 pb-6 space-y-8 mt-0 custom-scrollbar"
-        >
-          {/* Section: Sponsors */}
-          <div className="relative overflow-hidden rounded-lg border border-border/60 bg-gradient-to-br from-background/60 to-background/30 p-4">
-            <div className="absolute inset-0 pointer-events-none opacity-40">
-              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_60%)]" />
-            </div>
-
-            <h3 className="font-semibold mb-1 text-sm uppercase tracking-wider">
-              Sponsors
-            </h3>
-
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Co-Invoice is an open source project. Support development and get
-              your brand featured here.
-            </p>
-
-            <div className="mt-3">
-              <a
-                href="https://github.com/sponsors/mraxays"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block font-semibold text-xs px-3 py-1.5 rounded-md border transition-colors hover:bg-background/40"
-                style={{ color: accentHex, borderColor: accentHex }}
-              >
-                <HeartHandshake className="inline-block mr-1" />
-                Become a Sponsor
-              </a>
-            </div>
-          </div>
-          {/* Section 1: From & To */}
-          <div className="space-y-6">
-            <div className="bg-background/50 p-4 rounded-lg border border-border/50">
-              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                From
-              </h3>
-              <SenderForm />
-            </div>
-
-            <div className="bg-background/50 p-4 rounded-lg border border-border/50">
-              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                To
-              </h3>
-              <ReceiverForm />
-            </div>
-          </div>
-          <Separator />
-          {/* Section 2: Details */}
-          <div>
-            <div className="bg-background/50 p-4 rounded-lg border border-border/50">
-              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                Invoice Details
-              </h3>
-              <DetailsForm />
-            </div>
-          </div>
-          <Separator />
-          {/* Section 3: Line Items */}
-          <div>
-            <div className="bg-background/50 p-4 rounded-lg border border-border/50">
-              <LineItems />
-            </div>
-          </div>
-          <Separator />
-          {/* Section 4: Footer */}
-          <div className="space-y-2">
-            <div className="bg-background/50 p-4 rounded-lg border border-border/50">
-              <Label>Footer Note</Label>
-              <textarea
-                className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                value={invoice.footer}
-                onChange={(e) => updateFooter(e.target.value)}
-                placeholder="Thank you message..."
-              />
-            </div>
-          </div>
-          
+      <Tabs defaultValue="content" className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="border-b border-border/60 px-5 py-3"><TabsList className="grid h-11 w-full grid-cols-2 rounded-xl bg-muted/60 p-1"><TabsTrigger value="content" className="rounded-lg text-xs"><FileText size={14} className="mr-2" /> Content</TabsTrigger><TabsTrigger value="design" className="rounded-lg text-xs"><Palette size={14} className="mr-2" /> Design</TabsTrigger></TabsList></div>
+        <TabsContent value="content" className="mt-0 flex-1 space-y-4 overflow-y-auto px-5 py-5 custom-scrollbar">
+          <section className={sectionClass}><h3 className={headingClass}>Your business</h3><SenderForm /></section>
+          <section className={sectionClass}><h3 className={headingClass}>Client</h3><ReceiverForm /></section>
+          <section className={sectionClass}><h3 className={headingClass}>Invoice details</h3><DetailsForm /></section>
+          <section className={sectionClass}><LineItems /></section>
+          <section className={sectionClass}><SignatureForm /></section>
+          <section className={sectionClass}><Label className={headingClass}>Footer note</Label><textarea className="mt-1 flex min-h-[88px] w-full resize-y rounded-xl border border-input bg-muted/20 px-3 py-2.5 text-sm shadow-sm transition placeholder:text-muted-foreground/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30" value={invoice.footer} onChange={(e) => updateFooter(e.target.value)} placeholder="Add a thank you message or payment terms..." /></section>
         </TabsContent>
-
-        <TabsContent
-          value="design"
-          className="flex-1 overflow-y-auto px-6 pb-6 mt-0"
-        >
-          <DesignControls />
-        </TabsContent>
+        <TabsContent value="design" className="mt-0 flex-1 overflow-y-auto px-5 py-5 custom-scrollbar"><DesignControls /></TabsContent>
       </Tabs>
     </div>
   );

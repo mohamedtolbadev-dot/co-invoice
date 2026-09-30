@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { FONTS } from "@/lib/fontConfig";
 
 const COLORS = [
-  { name: "Blue", value: "blue-600", hex: "#2563eb" },
+  { name: "Violet", value: "#7C3AED", hex: "#7C3AED" },
   { name: "Emerald", value: "emerald-600", hex: "#059669" },
   { name: "Rose", value: "rose-600", hex: "#e11d48" },
   { name: "Amber", value: "amber-600", hex: "#d97706" },
@@ -27,7 +27,7 @@ const COLORS = [
 export function DesignControls() {
   const { design, setDesignProperty } = useInvoiceStore();
   const colorMap = {
-    "blue-600": "#2563eb",
+    "blue-600": "#7C3AED",
     "emerald-600": "#059669",
     "rose-600": "#e11d48",
     "amber-600": "#d97706",
@@ -35,13 +35,11 @@ export function DesignControls() {
   };
   const accentHex = design.accentColor.startsWith("#")
     ? design.accentColor
-    : colorMap[design.accentColor] || "#2563eb";
+    : colorMap[design.accentColor] || "#7C3AED";
   return (
-    <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-lg border border-border/60 bg-background/50 p-4">
-        <h3 className="font-semibold mb-1 text-sm uppercase tracking-wider">
-          Support the Project
-        </h3>
+    <div className="space-y-4">
+      <div className="relative overflow-hidden rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.08] via-background to-background p-4 shadow-sm">
+        <h3 className="mb-1 text-sm font-semibold">Make it yours</h3>
 
         <p className="text-sm text-muted-foreground leading-relaxed">
           If you find Co-Invoice useful, consider starring the repository on
@@ -62,10 +60,10 @@ export function DesignControls() {
         </div>
       </div>
 
-      <div className="space-y-2 p-2 rounded-lg border border-border/50">
-        <Label>Theme</Label>
-        <div className="flex items-center gap-4 bg-background/50 p-2 rounded-lg border border-border/50">
-          <div className="flex-1 text-sm text-muted-foreground">Dark Mode</div>
+      <div className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
+        <div><Label className="text-sm font-semibold">Appearance</Label><p className="mt-1 text-xs text-muted-foreground">Choose the editor theme.</p></div>
+        <div className="flex items-center gap-4 rounded-xl border border-border/60 bg-muted/30 p-3">
+          <div className="flex-1 text-sm font-medium">Dark mode</div>
           <button
             onClick={() => setDesignProperty("darkMode", !design.darkMode)}
             className={cn(
@@ -83,15 +81,15 @@ export function DesignControls() {
         </div>
       </div>
 
-      <div className="space-y-2 p-2 rounded-lg border border-border/50">
-        <Label>Accent Color</Label>
-        <div className="flex flex-wrap gap-2 items-center">
+      <div className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
+        <div><Label className="text-sm font-semibold">Brand color</Label><p className="mt-1 text-xs text-muted-foreground">Set the color used across your invoice.</p></div>
+        <div className="flex flex-wrap items-center gap-3">
           {COLORS.map((color) => (
             <button
               key={color.value}
               onClick={() => setDesignProperty("accentColor", color.value)}
               className={cn(
-                "w-8 h-8 rounded-sm border-2 transition-all",
+                "h-9 w-9 rounded-xl border-2 transition-all hover:scale-110",
                 design.accentColor === color.value
                   ? "border-foreground scale-110"
                   : "border-transparent opacity-80 hover:opacity-100 hover:scale-105"
@@ -108,7 +106,7 @@ export function DesignControls() {
               value={
                 design.accentColor.startsWith("#")
                   ? design.accentColor
-                  : "#2563eb"
+                  : "#7C3AED"
               }
               onChange={(e) => setDesignProperty("accentColor", e.target.value)}
               className="w-8 h-8 rounded-sm border-gray-300 cursor-pointer"
@@ -121,8 +119,8 @@ export function DesignControls() {
         </div>
       </div>
 
-      <div className="space-y-2 p-2 rounded-lg border border-border/50">
-        <Label>Typography</Label>
+      <div className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
+        <div><Label className="text-sm font-semibold">Typography</Label><p className="mt-1 text-xs text-muted-foreground">Pick a typeface for your document.</p></div>
         <Select
           value={design.fontStack}
           onValueChange={(v) => setDesignProperty("fontStack", v)}
@@ -161,15 +159,15 @@ export function DesignControls() {
         </Select>
       </div>
 
-      <div className="space-y-2 p-2 rounded-lg border border-border/50">
-        <Label>Template Style</Label>
+      <div className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
+        <div><Label className="text-sm font-semibold">Invoice template</Label><p className="mt-1 text-xs text-muted-foreground">Choose a layout that fits your brand.</p></div>
 
         <div className="bg-background/50 ">
           <Tabs
             value={design.template}
             onValueChange={(v) => setDesignProperty("template", v)}
           >
-            <TabsList className="w-full grid grid-cols-4">
+            <TabsList className="grid w-full grid-cols-2 gap-1 rounded-xl bg-muted/60 p-1 sm:grid-cols-4">
               <TabsTrigger value="modern">Modern</TabsTrigger>
               <TabsTrigger value="classic">Classic</TabsTrigger>
               <TabsTrigger value="bold">Bold</TabsTrigger>

@@ -26,7 +26,7 @@ export const PreviewCanvas = React.forwardRef((props, ref) => {
   };
 
   return (
-    <div className="h-full w-full bg-muted/30 p-4 md:p-8 overflow-y-auto flex justify-center items-start print:p-0 print:overflow-visible print:bg-white print:w-auto print:h-auto print:block">
+    <div className="flex h-full min-h-0 w-full min-w-0 items-start justify-center overflow-x-hidden overflow-y-auto bg-muted/30 p-2 sm:p-4 md:p-8 print:block print:h-auto print:w-auto print:overflow-visible print:bg-white print:p-0">
       {renderTemplate()}
     </div>
   );

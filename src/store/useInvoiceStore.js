@@ -44,13 +44,35 @@ const useInvoiceStore = create(
           },
         ],
         footer: "Thank you for your business! Payment is due within 7 days.",
+        signature: { image: "", name: "", title: "", position: { x: 76, y: 70 } },
       },
       design: {
-        accentColor: "blue-600",
-        fontStack: "inter",
+        accentColor: "#7C3AED",
+        fontStack: "droid-arabic-kufi",
         template: "modern", // modern, classic, bold, minimal
         darkMode: false,
       },
+      history: [],
+
+      saveInvoiceToHistory: () =>
+        set((state) => {
+          const snapshot = JSON.parse(JSON.stringify({ invoice: state.invoice, design: state.design }));
+          const entry = {
+            id: crypto.randomUUID(),
+            createdAt: new Date().toISOString(),
+            ...snapshot,
+          };
+          return { history: [entry, ...state.history] };
+        }),
+
+      loadInvoiceFromHistory: (id) =>
+        set((state) => {
+          const entry = state.history.find((item) => item.id === id);
+          return entry ? { invoice: entry.invoice, design: entry.design } : {};
+        }),
+
+      deleteInvoiceFromHistory: (id) =>
+        set((state) => ({ history: state.history.filter((item) => item.id !== id) })),
 
       // Actions
       updateSender: (field, value) =>
@@ -117,6 +139,17 @@ const useInvoiceStore = create(
           invoice: { ...state.invoice, footer: value },
         })),
 
+      updateSignature: (field, value) =>
+        set((state) => ({
+          invoice: {
+            ...state.invoice,
+            signature: {
+              ...(state.invoice.signature || { image: "", name: "", title: "", position: { x: 76, y: 70 } }),
+              [field]: value,
+            },
+          },
+        })),
+
       setDesignProperty: (property, value) =>
         set((state) => ({
           design: { ...state.design, [property]: value },
@@ -143,11 +176,38 @@ const useInvoiceStore = create(
               },
             ],
             footer: "",
+            signature: { image: "", name: "", title: "", position: { x: 76, y: 70 } },
           },
         }),
     }),
     {
       name: "invoice-storage", // local storage key
+      merge: (persistedState, currentState) => {
+        const persistedDesign = persistedState?.design || {};
+        const persistedInvoice = persistedState?.invoice || {};
+        const savedSignature = persistedInvoice.signature;
+        const signature =
+          savedSignature?.position?.x === 76 && savedSignature.position?.y === 84
+            ? { ...savedSignature, position: { x: 76, y: 70 } }
+            : savedSignature || currentState.invoice.signature;
+        return {
+          ...currentState,
+          ...persistedState,
+          invoice: {
+            ...currentState.invoice,
+            ...persistedInvoice,
+            signature,
+          },
+          design: {
+            ...currentState.design,
+            ...persistedDesign,
+            fontStack:
+              ["inter", "montserrat"].includes(persistedDesign.fontStack)
+                ? "droid-arabic-kufi"
+                : persistedDesign.fontStack || currentState.design.fontStack,
+          },
+        };
+      },
     }
   )
 );
